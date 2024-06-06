@@ -1,6 +1,6 @@
 
 #### PARTIZIONE CV #### hold_out=5
-cv_partition <- function(y, num_folds = 10, hold_out = NULL, seed = NULL) {
+bcv_partition <- function(y, num_folds = 10, hold_out = NULL, seed = NULL) {
   
   # numero di folds
   n <- length(y)
@@ -33,7 +33,7 @@ errorest_cv_BCV <- function(x, y, train, classify, num_folds = 10, hold_out = NU
   x <- as.matrix(x)
   y <- as.factor(y)
   
-  list_partitions <- cv_partition(y, num_folds = num_folds, hold_out = hold_out)
+  list_partitions <- bcv_partition(y, num_folds = num_folds, hold_out = hold_out)
   
   # calcolo misclassificate
   num_misclassified <- sapply(list_partitions, function(fold) {
