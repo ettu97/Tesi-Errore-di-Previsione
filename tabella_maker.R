@@ -7,7 +7,7 @@ tabella_confronti <- function(dataset, classe, R = NULL, seed = NULL,...) {
   b632_5nn <- MSE_BIAS_632(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)
   b632_plus_5nn <- MSE_BIAS_632_plus(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)
   cv_5nn <- MSE_BIAS_CV(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)
-  loocv_5nn <- MSE_BIAS_MCCV(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)
+  loocv_5nn <- MSE_BIAS_LOOCV(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)
   bcv_5nn <- MSE_BIAS_BCV(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)
   mccv_5nn <- MSE_BIAS_MCCV(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)
 
@@ -16,7 +16,7 @@ tabella_confronti <- function(dataset, classe, R = NULL, seed = NULL,...) {
   b632_7nn <- MSE_BIAS_632(dataset, classe = classe, R = R, train = train_7nn, classify = classify_knn, seed = seed)
   b632_plus_7nn <- MSE_BIAS_632_plus(dataset, classe = classe, R = R, train = train_7nn, classify = classify_knn, seed = seed)
   cv_7nn <- MSE_BIAS_CV(dataset, classe = classe, R = R, train = train_7nn, classify = classify_knn, seed = seed)
-  loocv_7nn <- MSE_BIAS_MCCV(dataset, classe = classe, R = R, train = train_7nn, classify = classify_knn, seed = seed)
+  loocv_7nn <- MSE_BIAS_LOOCV(dataset, classe = classe, R = R, train = train_7nn, classify = classify_knn, seed = seed)
   bcv_7nn <- MSE_BIAS_BCV(dataset, classe = classe, R = R, train = train_7nn, classify = classify_knn, seed = seed)
   mccv_7nn <- MSE_BIAS_MCCV(dataset, classe = classe, R = R, train = train_7nn, classify = classify_knn, seed = seed)
 
@@ -25,7 +25,7 @@ tabella_confronti <- function(dataset, classe, R = NULL, seed = NULL,...) {
   b632_lda <- MSE_BIAS_632(dataset, classe = classe, R = R, train = train_lda , classify = classify_lda, seed = seed)
   b632_plus_lda <- MSE_BIAS_632_plus(dataset, classe = classe, R = R, train = train_lda , classify = classify_lda, seed = seed)
   cv_lda <- MSE_BIAS_CV(dataset, classe = classe, R = R, train = train_lda , classify = classify_lda, seed = seed)
-  loocv_lda <- MSE_BIAS_MCCV(dataset, classe = classe, R = R, train = train_lda , classify = classify_lda, seed = seed)
+  loocv_lda <- MSE_BIAS_LOOCV(dataset, classe = classe, R = R, train = train_lda , classify = classify_lda, seed = seed)
   bcv_lda <- MSE_BIAS_BCV(dataset, classe = classe, R = R, train = train_lda , classify = classify_lda, seed = seed)
   mccv_lda <- MSE_BIAS_MCCV(dataset, classe = classe, R = R, train = train_lda , classify = classify_lda, seed = seed)
 
@@ -34,7 +34,7 @@ tabella_confronti <- function(dataset, classe, R = NULL, seed = NULL,...) {
   b632_qda <- MSE_BIAS_632(dataset, classe = classe, R = R, train = train_qda , classify = classify_qda, seed = seed)
   b632_plus_qda <- MSE_BIAS_632_plus(dataset, classe = classe, R = R, train = train_qda , classify = classify_qda, seed = seed)
   cv_qda <- MSE_BIAS_CV(dataset, classe = classe, R = R, train = train_qda , classify = classify_qda, seed = seed)
-  loocv_qda <- MSE_BIAS_MCCV(dataset, classe = classe, R = R, train = train_qda , classify = classify_qda, seed = seed)
+  loocv_qda <- MSE_BIAS_LOOCV(dataset, classe = classe, R = R, train = train_qda , classify = classify_qda, seed = seed)
   bcv_qda <- MSE_BIAS_BCV(dataset, classe = classe, R = R, train = train_qda , classify = classify_qda, seed = seed)
   mccv_qda <- MSE_BIAS_MCCV(dataset, classe = classe, R = R, train = train_qda , classify = classify_qda, seed = seed)
 
@@ -43,7 +43,7 @@ tabella_confronti <- function(dataset, classe, R = NULL, seed = NULL,...) {
   b632_tree <- MSE_BIAS_632(dataset, classe = classe, R = R, train = train_tree, classify = classify_tree, seed = seed)
   b632_plus_tree <- MSE_BIAS_632_plus(dataset, classe = classe, R = R, train = train_tree, classify = classify_tree, seed = seed)
   cv_tree <- MSE_BIAS_CV(dataset, classe = classe, R = R, train = train_tree, classify = classify_tree, seed = seed)
-  loocv_tree <- MSE_BIAS_MCCV(dataset, classe = classe, R = R, train = train_tree, classify = classify_tree, seed = seed)
+  loocv_tree <- MSE_BIAS_LOOCV(dataset, classe = classe, R = R, train = train_tree, classify = classify_tree, seed = seed)
   bcv_tree <- MSE_BIAS_BCV(dataset, classe = classe, R = R, train = train_tree, classify = classify_tree, seed = seed)
   mccv_tree <- MSE_BIAS_MCCV(dataset, classe = classe, R = R, train = train_tree, classify = classify_tree, seed = seed)
   
@@ -84,7 +84,7 @@ tabella_heart
 # tabella_diabetes <- tabella_confronti(diabetes, classe = 9, R = 30, seed = 123)
 tabella_diabetes
 
-# tabella_iris <- tabella_confronti(dataset = iris, classe = 5, R = 2, seed = 123)
+# tabella_iris <- tabella_confronti(dataset = iris, classe = 5, R = 50, seed = 123)
 tabella_iris
 
 
