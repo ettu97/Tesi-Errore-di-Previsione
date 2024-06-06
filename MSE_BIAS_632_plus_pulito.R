@@ -1,0 +1,134 @@
+
+#### CALCOLO ERRORE APPARENTE (TRAINING SET) ####
+errorest_apparent <- function(x, y, train, classify, ...) {
+  # trasformazioni necessarie
+  x <- as.matrix(x)
+  y <- as.factor(y)
+  
+  # errore apparente
+  train_out <- train(x, y, ...)
+  classifications <- classify(object = train_out, newdata = x)
+  mean(y != classifications)
+}
+
+#### CALCOLO ERRORE LOO BOOTSTRAP ####
+errorest_loo_boot <- function(x, y, train, classify, num_bootstraps = 50, ...) {
+  # trasformazioni necessarie
+  x <- as.matrix(x)
+  y <- as.factor(y)
+  
+  # elementi ausiliari
+  seq_y <- seq_along(y)
+  rep_NA <- rep.int(NA, times = length(y))
+  
+  # campionamento con reinserimento, creando un train e test (1 osservazione LOO)
+  loo_boot_error_rates <- lapply(seq_len(num_bootstraps), function(b) {
+    training <- sample(seq_y, replace = TRUE)
+    test <- which(!(seq_y %in% training))
+    train_out <- train(x[training, ], y[training])
+    # calcolo misclassificate per ogni campione bootstrap sull'osservazione non presente in esso
+    classifications <- classify(object = train_out, newdata = x[test, ])
+    replace(rep_NA, test, classifications != y[test])
+  })
+  loo_boot_error_rates <- do.call(rbind, loo_boot_error_rates)
+  loo_boot_error_rates <- colMeans(loo_boot_error_rates, na.rm = TRUE)
+  
+  # errore LOO
+  mean(loo_boot_error_rates)
+}
+
+#### CALCOLO ERRORE .632 PLUS ####
+errorest_632_plus <- function(x, y, z, w, train, classify, num_bootstraps = 50,
+                              seed = NULL , ...) {
+  # trasformazioni necessarie
+  x <- as.matrix(x)
+  y <- as.factor(y)
+  z <- as.matrix(z)
+  w <- as.factor(w)
+  
+  # seed per replicabilità 
+  if (is.null(seed)) {seed <- sample.int(1000, 1)}
+  # seed_used <- seed # in caso si volesse sapere il seed utilizzato
+  set.seed(seed)
+  # calcolo errore apparente
+  apparent <- errorest_apparent(x = x, y = y, train = train, classify = classify, ...)
+  
+  set.seed(seed) # seed di nuovo dopo calcolo errore apparente
+  # calcolo errore LOO
+  loo_boot <- errorest_loo_boot(x = x, y = y, train = train, classify = classify,
+                                  num_bootstraps = num_bootstraps, ...)
+  
+  # costruzione stimatore 'no-information error rate' (gamma_hat)
+  train_out <- train(x, y, ...)
+  classify_out <- classify(object = train_out, newdata = x)
+  
+  n <- length(y)
+  p_k <- as.vector(table(y)) / n
+  q_k <- as.vector(table(classify_out)) / n
+  gamma_hat <- drop(p_k %*% (1 - q_k))
+  
+  # stimatore per il 'relative overfitting rate'
+  R_hat <- (loo_boot - apparent) / (gamma_hat - apparent)
+  
+  # calcolo del peso w_hat per il .632+
+  w_hat <- 0.632 / (1 - 0.368 * R_hat)
+  
+  # errore .632+
+  boot_err_632_plus <- (1 - w_hat) * apparent + w_hat * loo_boot
+  # calcolo errore su Test (w+z)
+  train_test <- train(x, y, ...)
+  classifications_test <- classify(object = train_test, newdata = z)
+  true_err <- mean(w != classifications_test)
+  # restituzione risultati
+  result_list <- list(boot_err_632_plus, true_err)
+  return(result_list)
+}
+
+#### CALCOLO MSE E BIAS .632 PLUS ####
+MSE_BIAS_632_plus <- function(dataset, classe, train, classify, num_bootstraps = 50,
+                              seed = NULL , R = NULL , ...) {
+  differenze_632_MSE <- numeric(0)
+  differenze_632_BIAS <- numeric(0)
+  # in caso R non venisse specificato
+  if (is.null(R)) {R <- 50}
+  # in caso il seed non venisse specificato
+  if (is.null(seed)) {seed <- sample.int(1000, 1)}
+  set.seed(seed)
+  # seed per replicabilità
+  seeds <- c(sample.int(1000, R))
+  set.seed(seed)
+  # calcolo errori per ogni ripetizione R
+  for (r in 1:R) {
+    set.seed(seeds[r])
+    seed <- seeds[r]
+    # Suddivisione
+    idx = sample(nrow(dataset), nrow(dataset)*0.7) 
+    # Training Set
+    trn = dataset[idx, ]
+    # Test Set
+    tst = dataset[-idx,] 
+    classe <- as.numeric(classe)
+    
+    # trasformazioni necessarie
+    x <- data.matrix(trn[, -classe])
+    y <- trn[, classe]
+    z <- data.matrix(tst[, -classe])
+    w <- tst[, classe]
+    # errori .632+
+    errori_632 <- errorest_632_plus(x, y, z, w, train, classify, num_bootstraps = 50,
+                                    seed = seeds[r], ...)
+    # errore quadratico per la r-esima ripetizione
+    differenza_632_cubo <- (errori_632[[1]]-errori_632[[2]])^2
+    differenze_632_MSE <- c(differenze_632_MSE, differenza_632_cubo)
+    # errore semplice per la r-esima ripetizione
+    differenza_632 <- (errori_632[[1]]-errori_632[[2]])
+    differenze_632_BIAS <- c(differenze_632_BIAS, differenza_632)
+  }
+  # MSE
+  MSE_632 <- sum(differenze_632_MSE)/R
+  # BIAS
+  BIAS_632 <- sum(differenze_632_BIAS)/R
+  # restituzione risultati
+  result_list <- list(MSE = MSE_632, Bias = BIAS_632)
+  return(result_list)
+}
