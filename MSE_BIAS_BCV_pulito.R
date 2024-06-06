@@ -60,8 +60,7 @@ errorest_bcv <- function(x, y, z, w, train, classify, num_bootstraps = 50,
   # seed_used <- seed # in caso si volesse sapere il seed utilizzato
   set.seed(seed)
   
-  # For each bootstrap replicate, we sample with replacement from the data set
-  # and compute the cross-validation error rate from the bootstrapped data set.
+  # calcolo errore bcv
   bcv_error_rates <- sapply(seq_len(num_bootstraps), function(b) {
     training <- sample(seq_along(y), replace = TRUE)
     errorest_cv_BCV(x = x[training, ], y = y[training], train = train,
