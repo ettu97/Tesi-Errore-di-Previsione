@@ -34,6 +34,10 @@ train_3nn<- function(x, y, k = 3) {
   list(train_data = x, train_labels = y, k = k)
 }
 
+train_5nn<- function(x, y, k = 5) {
+  list(train_data = x, train_labels = y, k = k)
+}
+
 train_7nn <- function(x, y, k = 7) {
   list(train_data = x, train_labels = y, k = k)
 }
