@@ -1,12 +1,4 @@
-library(caret)
-library(class)
-library(rpart)
-library(tidyverse)
-library(kableExtra)
-library(knitr)
-library(dplyr)
-library(gridExtra)
-library(MASS)
+
 #### FUNZIONI AUSILIARI ####
 
 #### LDA ####
