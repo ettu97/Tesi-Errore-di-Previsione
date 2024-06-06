@@ -11,7 +11,17 @@ library(MASS)
 
 #### LDA ####
 
-lda_wrapper <- function(object, newdata) { predict(object, newdata)$class }
+# FUNZIONE TRAIN
+train_lda <- function(x, y) {
+  model <- lda(x, grouping = y)
+  return(model)
+}
+
+# FUNZIONE CLASSIFY
+classify_lda <- function(object, newdata) {
+  predictions <- predict(object, newdata)$class
+  return(predictions)
+}
 
 #### QDA ####
 
