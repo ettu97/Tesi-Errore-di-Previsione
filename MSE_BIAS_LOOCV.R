@@ -50,7 +50,7 @@ errorest_loocv <- function(x, y, z, w, train, classify, seed = NULL, ...) {
 }
 
 #### CALCOLO MSE E BIAS loocv ####
-MSE_BIAS_loocv <- function(dataset, classe, train, classify, seed = NULL, R = NULL , ...) {
+MSE_BIAS_LOOCV <- function(dataset, classe, train, classify, seed = NULL, R = NULL , ...) {
   differenze_loocv_MSE <- numeric(0)
   differenze_loocv_BIAS <- numeric(0)
   # in caso R non venisse specificato
