@@ -1,112 +1,75 @@
 
-
 #### TABELLA PER CONFRONTI ####
 
 tabella_confronti <- function(dataset, classe, R = NULL, seed = NULL,...) {
   #### KNN K=3 ####
-  MSE_boot_5nn <- MSE_BIAS_boot(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)$MSE
-  MSE_632_5nn <- MSE_BIAS_632(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)$MSE
-  MSE_632_plus_5nn <- MSE_BIAS_632_plus(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)$MSE
-  MSE_cv_5nn <- MSE_BIAS_CV(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)$MSE
-  MSE_bcv_5nn <- MSE_BIAS_BCV(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)$MSE
-  MSE_mccv_5nn <- MSE_BIAS_MCCV(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)$MSE
-  
-  BIAS_boot_5nn <- MSE_BIAS_boot(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)$Bias
-  BIAS_632_5nn <- MSE_BIAS_632(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)$Bias
-  BIAS_632_plus_5nn <- MSE_BIAS_632_plus(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)$Bias
-  BIAS_cv_5nn <- MSE_BIAS_CV(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)$Bias
-  BIAS_bcv_5nn <- MSE_BIAS_BCV(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)$Bias
-  BIAS_mccv_5nn <- MSE_BIAS_MCCV(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)$Bias
+  boot_5nn <- MSE_BIAS_boot(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)
+  b632_5nn <- MSE_BIAS_632(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)
+  b632_plus_5nn <- MSE_BIAS_632_plus(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)
+  cv_5nn <- MSE_BIAS_CV(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)
+  bcv_5nn <- MSE_BIAS_BCV(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)
+  mccv_5nn <- MSE_BIAS_MCCV(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)
   
   #### KNN K=7 ####
-  MSE_boot_7nn <- MSE_BIAS_boot(dataset, classe = classe, R = R, train = train_7nn, classify = classify_knn, seed = seed)$MSE
-  MSE_632_7nn <- MSE_BIAS_632(dataset, classe = classe, R = R, train = train_7nn, classify = classify_knn, seed = seed)$MSE
-  MSE_632_plus_7nn <- MSE_BIAS_632_plus(dataset, classe = classe, R = R, train = train_7nn, classify = classify_knn, seed = seed)$MSE
-  MSE_cv_7nn <- MSE_BIAS_CV(dataset, classe = classe, R = R, train = train_7nn, classify = classify_knn, seed = seed)$MSE
-  MSE_bcv_7nn <- MSE_BIAS_BCV(dataset, classe = classe, R = R, train = train_7nn, classify = classify_knn, seed = seed)$MSE
-  MSE_mccv_7nn <- MSE_BIAS_MCCV(dataset, classe = classe, R = R, train = train_7nn, classify = classify_knn, seed = seed)$MSE
-  
-  BIAS_boot_7nn <- MSE_BIAS_boot(dataset, classe = classe, R = R, train = train_7nn, classify = classify_knn, seed = seed)$Bias
-  BIAS_632_7nn <- MSE_BIAS_632(dataset, classe = classe, R = R, train = train_7nn, classify = classify_knn, seed = seed)$Bias
-  BIAS_632_plus_7nn <- MSE_BIAS_632_plus(dataset, classe = classe, R = R, train = train_7nn, classify = classify_knn, seed = seed)$Bias
-  BIAS_cv_7nn <- MSE_BIAS_CV(dataset, classe = classe, R = R, train = train_7nn, classify = classify_knn, seed = seed)$Bias
-  BIAS_bcv_7nn <- MSE_BIAS_BCV(dataset, classe = classe, R = R, train = train_7nn, classify = classify_knn, seed = seed)$Bias
-  BIAS_mccv_7nn <- MSE_BIAS_MCCV(dataset, classe = classe, R = R, train = train_7nn, classify = classify_knn, seed = seed)$Bias
+  boot_7nn <- MSE_BIAS_boot(dataset, classe = classe, R = R, train = train_7nn, classify = classify_knn, seed = seed)
+  b632_7nn <- MSE_BIAS_632(dataset, classe = classe, R = R, train = train_7nn, classify = classify_knn, seed = seed)
+  b632_plus_7nn <- MSE_BIAS_632_plus(dataset, classe = classe, R = R, train = train_7nn, classify = classify_knn, seed = seed)
+  cv_7nn <- MSE_BIAS_CV(dataset, classe = classe, R = R, train = train_7nn, classify = classify_knn, seed = seed)
+  bcv_7nn <- MSE_BIAS_BCV(dataset, classe = classe, R = R, train = train_7nn, classify = classify_knn, seed = seed)
+  mccv_7nn <- MSE_BIAS_MCCV(dataset, classe = classe, R = R, train = train_7nn, classify = classify_knn, seed = seed)
   
   #### LDA ####
-  MSE_boot_lda <- MSE_BIAS_boot(dataset, classe = classe, R = R, train = train_lda , classify = classify_lda, seed = seed)$MSE
-  MSE_632_lda <- MSE_BIAS_632(dataset, classe = classe, R = R, train = train_lda , classify = classify_lda, seed = seed)$MSE
-  MSE_632_plus_lda <- MSE_BIAS_632_plus(dataset, classe = classe, R = R, train = train_lda , classify = classify_lda, seed = seed)$MSE
-  MSE_cv_lda <- MSE_BIAS_CV(dataset, classe = classe, R = R, train = train_lda , classify = classify_lda, seed = seed)$MSE
-  MSE_bcv_lda <- MSE_BIAS_BCV(dataset, classe = classe, R = R, train = train_lda , classify = classify_lda, seed = seed)$MSE
-  MSE_mccv_lda <- MSE_BIAS_MCCV(dataset, classe = classe, R = R, train = train_lda , classify = classify_lda, seed = seed)$MSE
-  
-  BIAS_boot_lda <- MSE_BIAS_boot(dataset, classe = classe, R = R, train = train_lda , classify = classify_lda, seed = seed)$Bias
-  BIAS_632_lda <- MSE_BIAS_632(dataset, classe = classe, R = R, train = train_lda , classify = classify_lda, seed = seed)$Bias
-  BIAS_632_plus_lda <- MSE_BIAS_632_plus(dataset, classe = classe, R = R, train = train_lda , classify = classify_lda, seed = seed)$Bias
-  BIAS_cv_lda <- MSE_BIAS_CV(dataset, classe = classe, R = R, train = train_lda , classify = classify_lda, seed = seed)$Bias
-  BIAS_bcv_lda <- MSE_BIAS_BCV(dataset, classe = classe, R = R, train = train_lda , classify = classify_lda, seed = seed)$Bias
-  BIAS_mccv_lda <- MSE_BIAS_MCCV(dataset, classe = classe, R = R, train = train_lda , classify = classify_lda, seed = seed)$Bias
-  
+  boot_lda <- MSE_BIAS_boot(dataset, classe = classe, R = R, train = train_lda , classify = classify_lda, seed = seed)
+  b632_lda <- MSE_BIAS_632(dataset, classe = classe, R = R, train = train_lda , classify = classify_lda, seed = seed)
+  b632_plus_lda <- MSE_BIAS_632_plus(dataset, classe = classe, R = R, train = train_lda , classify = classify_lda, seed = seed)
+  cv_lda <- MSE_BIAS_CV(dataset, classe = classe, R = R, train = train_lda , classify = classify_lda, seed = seed)
+  bcv_lda <- MSE_BIAS_BCV(dataset, classe = classe, R = R, train = train_lda , classify = classify_lda, seed = seed)
+  mccv_lda <- MSE_BIAS_MCCV(dataset, classe = classe, R = R, train = train_lda , classify = classify_lda, seed = seed)
+
   #### QDA ####
-  MSE_boot_qda <- MSE_BIAS_boot(dataset, classe = classe, R = R, train = train_qda , classify = classify_qda, seed = seed)$MSE
-  MSE_632_qda <- MSE_BIAS_632(dataset, classe = classe, R = R, train = train_qda , classify = classify_qda, seed = seed)$MSE
-  MSE_632_plus_qda <- MSE_BIAS_632_plus(dataset, classe = classe, R = R, train = train_qda , classify = classify_qda, seed = seed)$MSE
-  MSE_cv_qda <- MSE_BIAS_CV(dataset, classe = classe, R = R, train = train_qda , classify = classify_qda, seed = seed)$MSE
-  MSE_bcv_qda <- MSE_BIAS_BCV(dataset, classe = classe, R = R, train = train_qda , classify = classify_qda, seed = seed)$MSE
-  MSE_mccv_qda <- MSE_BIAS_MCCV(dataset, classe = classe, R = R, train = train_qda , classify = classify_qda, seed = seed)$MSE
-  
-  BIAS_boot_qda <- MSE_BIAS_boot(dataset, classe = classe, R = R, train = train_qda , classify = classify_qda, seed = seed)$Bias
-  BIAS_632_qda <- MSE_BIAS_632(dataset, classe = classe, R = R, train = train_qda , classify = classify_qda, seed = seed)$Bias
-  BIAS_632_plus_qda <- MSE_BIAS_632_plus(dataset, classe = classe, R = R, train = train_qda , classify = classify_qda, seed = seed)$Bias
-  BIAS_cv_qda <- MSE_BIAS_CV(dataset, classe = classe, R = R, train = train_qda , classify = classify_qda, seed = seed)$Bias
-  BIAS_bcv_qda <- MSE_BIAS_BCV(dataset, classe = classe, R = R, train = train_qda , classify = classify_qda, seed = seed)$Bias
-  BIAS_mccv_qda <- MSE_BIAS_MCCV(dataset, classe = classe, R = R, train = train_qda , classify = classify_qda, seed = seed)$Bias
+  boot_qda <- MSE_BIAS_boot(dataset, classe = classe, R = R, train = train_qda , classify = classify_qda, seed = seed)
+  b632_qda <- MSE_BIAS_632(dataset, classe = classe, R = R, train = train_qda , classify = classify_qda, seed = seed)
+  b632_plus_qda <- MSE_BIAS_632_plus(dataset, classe = classe, R = R, train = train_qda , classify = classify_qda, seed = seed)
+  cv_qda <- MSE_BIAS_CV(dataset, classe = classe, R = R, train = train_qda , classify = classify_qda, seed = seed)
+  bcv_qda <- MSE_BIAS_BCV(dataset, classe = classe, R = R, train = train_qda , classify = classify_qda, seed = seed)
+  mccv_qda <- MSE_BIAS_MCCV(dataset, classe = classe, R = R, train = train_qda , classify = classify_qda, seed = seed)
   
   #### TREE ####
-  MSE_boot_tree <- MSE_BIAS_boot(dataset, classe = classe, R = R, train = train_tree, classify = classify_tree, seed = seed)$MSE
-  MSE_632_tree <- MSE_BIAS_632(dataset, classe = classe, R = R, train = train_tree, classify = classify_tree, seed = seed)$MSE
-  MSE_632_plus_tree <- MSE_BIAS_632_plus(dataset, classe = classe, R = R, train = train_tree, classify = classify_tree, seed = seed)$MSE
-  MSE_cv_tree <- MSE_BIAS_CV(dataset, classe = classe, R = R, train = train_tree, classify = classify_tree, seed = seed)$MSE
-  MSE_bcv_tree <- MSE_BIAS_BCV(dataset, classe = classe, R = R, train = train_tree, classify = classify_tree, seed = seed)$MSE
-  MSE_mccv_tree <- MSE_BIAS_MCCV(dataset, classe = classe, R = R, train = train_tree, classify = classify_tree, seed = seed)$MSE
+  boot_tree <- MSE_BIAS_boot(dataset, classe = classe, R = R, train = train_tree, classify = classify_tree, seed = seed)
+  b632_tree <- MSE_BIAS_632(dataset, classe = classe, R = R, train = train_tree, classify = classify_tree, seed = seed)
+  b632_plus_tree <- MSE_BIAS_632_plus(dataset, classe = classe, R = R, train = train_tree, classify = classify_tree, seed = seed)
+  cv_tree <- MSE_BIAS_CV(dataset, classe = classe, R = R, train = train_tree, classify = classify_tree, seed = seed)
+  bcv_tree <- MSE_BIAS_BCV(dataset, classe = classe, R = R, train = train_tree, classify = classify_tree, seed = seed)
+  mccv_tree <- MSE_BIAS_MCCV(dataset, classe = classe, R = R, train = train_tree, classify = classify_tree, seed = seed)
   
-  BIAS_boot_tree <- MSE_BIAS_boot(dataset, classe = classe, R = R, train = train_tree, classify = classify_tree, seed = seed)$Bias
-  BIAS_632_tree <- MSE_BIAS_632(dataset, classe = classe, R = R, train = train_tree, classify = classify_tree, seed = seed)$Bias
-  BIAS_632_plus_tree <- MSE_BIAS_632_plus(dataset, classe = classe, R = R, train = train_tree, classify = classify_tree, seed = seed)$Bias
-  BIAS_cv_tree <- MSE_BIAS_CV(dataset, classe = classe, R = R, train = train_tree, classify = classify_tree, seed = seed)$Bias
-  BIAS_bcv_tree <- MSE_BIAS_BCV(dataset, classe = classe, R = R, train = train_tree, classify = classify_tree, seed = seed)$Bias
-  BIAS_mccv_tree <- MSE_BIAS_MCCV(dataset, classe = classe, R = R, train = train_tree, classify = classify_tree, seed = seed)$Bias
-  
-  # Create the data frame
+  # dataframe
   data <- data.frame(
-    MSE1_5nn = c(MSE_boot_5nn , MSE_632_5nn, MSE_632_plus_5nn, MSE_cv_5nn, MSE_bcv_5nn, MSE_mccv_5nn), 
-    Bias1_5nn = c(BIAS_boot_5nn , BIAS_632_5nn, BIAS_632_plus_5nn, BIAS_cv_5nn, BIAS_bcv_5nn, BIAS_mccv_5nn),
-    MSE2_7nn = c(MSE_boot_7nn , MSE_632_7nn, MSE_632_plus_7nn, MSE_cv_7nn, MSE_bcv_7nn, MSE_mccv_7nn), 
-    Bias2_7nn = c(BIAS_boot_7nn , BIAS_632_7nn, BIAS_632_plus_7nn, BIAS_cv_7nn, BIAS_bcv_7nn, BIAS_mccv_7nn),
-    MSE3_tree = c(MSE_boot_tree , MSE_632_tree, MSE_632_plus_tree, MSE_cv_tree, MSE_bcv_tree, MSE_mccv_tree), 
-    Bias3_tree = c(BIAS_boot_tree , BIAS_632_tree, BIAS_632_plus_tree, BIAS_cv_tree, BIAS_bcv_tree, BIAS_mccv_tree),
-    MSE4_lda = c(MSE_boot_lda , MSE_632_lda, MSE_632_plus_lda, MSE_cv_lda, MSE_bcv_lda, MSE_mccv_lda), 
-    Bias4_lda = c(BIAS_boot_lda , BIAS_632_lda, BIAS_632_plus_lda, BIAS_cv_lda, BIAS_bcv_lda, BIAS_mccv_lda),
-    MSE3_qda = c(MSE_boot_qda , MSE_632_qda, MSE_632_plus_qda, MSE_cv_qda, MSE_bcv_qda, MSE_mccv_qda), 
-    Bias3_qda = c(BIAS_boot_qda , BIAS_632_qda, BIAS_632_plus_qda, BIAS_cv_qda, BIAS_bcv_qda, BIAS_mccv_qda)
+    MSE1_5nn = c(boot_5nn$MSE , b632_5nn$MSE, b632_plus_5nn$MSE, cv_5nn$MSE, bcv_5nn$MSE, mccv_5nn$MSE), 
+    Bias1_5nn = c(boot_5nn$Bias , b632_5nn$Bias, b632_plus_5nn$Bias, cv_5nn$Bias, bcv_5nn$Bias, mccv_5nn$Bias),
+    MSE2_7nn = c(boot_7nn$MSE , b632_7nn$MSE, b632_plus_7nn$MSE, cv_7nn$MSE, bcv_7nn$MSE, mccv_7nn$MSE), 
+    Bias2_7nn = c(boot_7nn$Bias , b632_7nn$Bias, b632_plus_7nn$Bias, cv_7nn$Bias, bcv_7nn$Bias, mccv_7nn$Bias),
+    MSE3_tree = c(boot_tree$MSE , b632_tree$MSE, b632_plus_tree$MSE, cv_tree$MSE, bcv_tree$MSE, mccv_tree$MSE), 
+    Bias3_tree = c(boot_tree$Bias , b632_tree$Bias, b632_plus_tree$Bias, cv_tree$Bias, bcv_tree$Bias, mccv_tree$Bias),
+    MSE4_lda = c(boot_lda$MSE , b632_lda$MSE, b632_plus_lda$MSE, cv_lda$MSE, bcv_lda$MSE, mccv_lda$MSE), 
+    Bias4_lda = c(boot_lda$Bias , b632_lda$Bias, b632_plus_lda$Bias, cv_lda$Bias, bcv_lda$Bias, mccv_lda$Bias),
+    MSE3_qda = c(boot_qda$MSE , b632_qda$MSE, b632_plus_qda$MSE, cv_qda$MSE, bcv_qda$MSE, mccv_qda$MSE), 
+    Bias3_qda = c(boot_qda$Bias , b632_qda$Bias, b632_plus_qda$Bias, cv_qda$Bias, bcv_qda$Bias, mccv_qda$Bias)
   )
-  
   
   data <- data %>%
     mutate(across(starts_with("MSE"), sqrt))
   rownames(data) <- c("boot", ".632", ".632+", "10-fold CV", "BCV", "MC-CV")
   data <- cbind(Row = rownames(data), data)
   
-  # Rename the columns
-  colnames(data) <- c("Stimatore", rep(c("RMSE", "Bias"), 3))
+  # colonne
+  colnames(data) <- c("Stimatore", rep(c("RMSE", "Bias"), 5))
   
-  # Create the kable table and add headers
+  # tabella
   kable(data, "html", row.names = FALSE) %>%
     kable_styling(bootstrap_options = "striped", full_width = F) %>%
     add_header_above(c(" " = 1, "5-NN" = 2, "7-NN" = 2, "TREE" = 2, "LDA" = 2, "QDA" = 2))  %>%
     kable_styling(bootstrap_options = c("hover", "bordered", "striped", "responsive"))
- 
+  
 }
 
 
@@ -116,10 +79,8 @@ tabella_heart
 # tabella_diabetes <- tabella_confronti(diabetes, classe = 9, R = 30, seed = 123)
 tabella_diabetes
 
-# tabella_iris <- tabella_confronti(iris, classe = 5, R = 50, seed = 123)
+# tabella_iris <- tabella_confronti(dataset = iris, classe = 5, R = 2, seed = 123)
 tabella_iris
-
-
 
 
 
