@@ -38,24 +38,27 @@ errorest_cv <- function(x, y, z, w, train, classify, num_folds = 10, hold_out = 
   
   # seed
   if (is.null(seed)) {seed <- sample.int(1000, 1)}
-  # seed_used <- seed # in caso si volesse sapere il seed utilizzato
   set.seed(seed)
   list_partitions <- cv_partition(y, num_folds = num_folds, hold_out = hold_out, seed = seed)
-  # calcolo misclassificate
-  num_misclassified <- sapply(list_partitions, function(fold) {
+  
+  # Calculate misclassified errors for each fold
+  errors <- sapply(list_partitions, function(fold) {
     train_out <- with(fold, train(x[training, ], y[training], ...))
-    classifications <- with(fold, classify(object = train_out,
-                                           newdata = x[-training, ]))
-    with(fold, sum(classifications != y[-training]))
+    classifications <- with(fold, classify(object = train_out, newdata = x[test, ]))
+    with(fold, mean(classifications != y[test]))  # Average error for this fold
   })
-  # errore CV
-  err_cv <- sum(num_misclassified) / length(y)
-  # calcolo errore su Test (w+z)
+  
+  # CV error (average over all folds)
+  err_cv <- mean(errors)
+  
+  # Calculate true error on Test (w+z)
   train_test <- train(x, y, ...)
   classifications_test <- classify(object = train_test, newdata = z)
   true_err <- mean(w != classifications_test)
-  # restituzione risultati
+  
+  # Return results
   result_list <- list(err_cv, true_err)
+  names(result_list) <- c("CV Error", "True Error")
   return(result_list)
 }
 
