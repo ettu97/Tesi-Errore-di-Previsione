@@ -48,7 +48,7 @@ errorest_cv_BCV <- function(x, y, train, classify, num_folds = 10, hold_out = NU
 }
 
 #### CALCOLO ERRORE BCV ####
-errorest_bcv <- function(x, y, z, w, train, classify, num_bootstraps = 50,
+errorest_bcv <- function(x, y, z, w, train, classify, num_bootstraps = 10000,
                          num_folds = 10, hold_out = NULL, seed=NULL, ...) {
   x <- as.matrix(x)
   y <- as.factor(y)
@@ -82,10 +82,12 @@ errorest_bcv <- function(x, y, z, w, train, classify, num_bootstraps = 50,
 }
 
 #### CALCOLO MSE E BIAS BCV ####
-MSE_BIAS_BCV <- function(dataset, classe, train, classify, num_bootstraps = 50,
+MSE_BIAS_BCV <- function(dataset, classe, train, classify, num_bootstraps = 10000,
                          num_folds = 10, hold_out = NULL, seed=NULL, R = NULL , ...) {
   differenze_bcv_MSE <- numeric(0)
   differenze_bcv_BIAS <- numeric(0)
+  bcv_errs <- numeric(R)
+  true_errs <- numeric(R)
   # in caso R non venisse specificato
   if (is.null(R)) {R <- 50}
   # in caso il seed non venisse specificato
@@ -112,8 +114,10 @@ MSE_BIAS_BCV <- function(dataset, classe, train, classify, num_bootstraps = 50,
     z <- data.matrix(tst[, -classe])
     w <- tst[, classe]
     # errori CV
-    errori_bcv <- errorest_bcv(x, y, z, w, train, classify, num_bootstraps = 50,
+    errori_bcv <- errorest_bcv(x, y, z, w, train, classify, num_bootstraps = num_bootstraps,
                                num_folds = 10, hold_out = NULL, seed = seeds[r], ...)
+    bcv_errs[r] <- errori_bcv[[1]]
+    true_errs[r] <- errori_bcv[[2]]
     # errore quadratico per la r-esima ripetizione
     differenza_bcv_cubo <- (errori_bcv[[1]]-errori_bcv[[2]])^2
     differenze_bcv_MSE <- c(differenze_bcv_MSE, differenza_bcv_cubo)
@@ -126,6 +130,6 @@ MSE_BIAS_BCV <- function(dataset, classe, train, classify, num_bootstraps = 50,
   # BIAS
   BIAS_bcv <- sum(differenze_bcv_BIAS)/R
   # restituzione risultati
-  result_list <- list(MSE = MSE_bcv, Bias = BIAS_bcv)
+  result_list <- list(MSE = MSE_bcv, Bias = BIAS_bcv, errori = bcv_errs, true_errors = mean(true_errs))
   return(result_list)
 }

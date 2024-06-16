@@ -53,6 +53,8 @@ errorest_loocv <- function(x, y, z, w, train, classify, seed = NULL, ...) {
 MSE_BIAS_LOOCV <- function(dataset, classe, train, classify, seed = NULL, R = NULL , ...) {
   differenze_loocv_MSE <- numeric(0)
   differenze_loocv_BIAS <- numeric(0)
+  loocv_errs <- numeric(R)
+  true_errs <- numeric(R)
   # in caso R non venisse specificato
   if (is.null(R)) {R <- 50}
   # in caso il seed non venisse specificato
@@ -80,6 +82,8 @@ MSE_BIAS_LOOCV <- function(dataset, classe, train, classify, seed = NULL, R = NU
     w <- tst[, classe]
     # errori loocv
     errori_loocv <- errorest_loocv(x, y, z, w, train, classify, seed = seeds[r], ...)
+    loocv_errs[r] <- errori_loocv[[1]]
+    true_errs[r] <- errori_loocv[[2]]
     # errore quadratico per la r-esima ripetizione
     differenza_loocv_cubo <- (errori_loocv[[1]]-errori_loocv[[2]])^2
     differenze_loocv_MSE <- c(differenze_loocv_MSE, differenza_loocv_cubo)
@@ -92,6 +96,6 @@ MSE_BIAS_LOOCV <- function(dataset, classe, train, classify, seed = NULL, R = NU
   # BIAS
   BIAS_loocv <- sum(differenze_loocv_BIAS)/R
   # restituzione risultati
-  result_list <- list(MSE = MSE_loocv, Bias = BIAS_loocv)
+  result_list <- list(MSE = MSE_loocv, Bias = BIAS_loocv, errori = loocv_errs, true_errors = mean(true_errs))
   return(result_list)
 }

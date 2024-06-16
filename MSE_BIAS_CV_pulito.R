@@ -67,6 +67,8 @@ MSE_BIAS_CV <- function(dataset, classe, train, classify, num_folds = 10,
                         hold_out = NULL, seed = NULL, R = NULL , ...) {
   differenze_cv_MSE <- numeric(0)
   differenze_cv_BIAS <- numeric(0)
+  cv_errs <- numeric(R)
+  true_errs <- numeric(R)
   # in caso R non venisse specificato
   if (is.null(R)) {R <- 50}
   # in caso il seed non venisse specificato
@@ -95,6 +97,8 @@ MSE_BIAS_CV <- function(dataset, classe, train, classify, num_folds = 10,
     # errori CV
     errori_cv <- errorest_cv(x, y, z, w, train, classify, num_folds = 10, 
                              hold_out = NULL, seed = seeds[r], ...)
+    cv_errs[r] <- errori_cv[[1]]
+    true_errs[r] <- errori_cv[[2]]
     # errore quadratico per la r-esima ripetizione
     differenza_cv_cubo <- (errori_cv[[1]]-errori_cv[[2]])^2
     differenze_cv_MSE <- c(differenze_cv_MSE, differenza_cv_cubo)
@@ -107,6 +111,6 @@ MSE_BIAS_CV <- function(dataset, classe, train, classify, num_folds = 10,
   # BIAS
   BIAS_cv <- sum(differenze_cv_BIAS)/R
   # restituzione risultati
-  result_list <- list(MSE = MSE_cv, Bias = BIAS_cv)
+  result_list <- list(MSE = MSE_cv, Bias = BIAS_cv, errori = cv_errs, true_errors = mean(true_errs))
   return(result_list)
 }

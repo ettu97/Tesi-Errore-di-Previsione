@@ -37,6 +37,8 @@ MSE_BIAS_boot <- function(dataset, classe, train, classify, num_bootstraps = 50,
                           apparent = NULL, loo_boot = NULL, seed = NULL , R = NULL , ...) {
   differenze_boot_MSE <- numeric(0)
   differenze_boot_BIAS <- numeric(0)
+  boot_errs <- numeric(R)
+  true_errs <- numeric(R)
   # in caso R non venisse specificato
   if (is.null(R)) {R <- 50}
   # in caso il seed non venisse specificato
@@ -64,6 +66,8 @@ MSE_BIAS_boot <- function(dataset, classe, train, classify, num_bootstraps = 50,
     w <- tst[, classe]
     # errori boot
     errori_boot <- errorest_boot(x, y, z, w, train, classify, num_bootstraps = 50, seed = seeds[r], ...)
+    boot_errs[r] <- errori_boot[[1]]
+    true_errs[r] <- errori_boot[[2]]
     # errore quadratico per la r-esima ripetizione
     differenza_boot_cubo <- (errori_boot[[1]]-errori_boot[[2]])^2
     differenze_boot_MSE <- c(differenze_boot_MSE, differenza_boot_cubo)
@@ -76,6 +80,7 @@ MSE_BIAS_boot <- function(dataset, classe, train, classify, num_bootstraps = 50,
   # BIAS
   BIAS_boot <- sum(differenze_boot_BIAS)/R
   # restituzione risultati
-  result_list <- list(MSE = MSE_boot, Bias = BIAS_boot)
+  result_list <- list(MSE = MSE_boot, Bias = BIAS_boot, errori=boot_errs, true_errors= mean(true_errs))
   return(result_list)
 }
+

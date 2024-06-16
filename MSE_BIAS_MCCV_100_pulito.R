@@ -60,6 +60,8 @@ errorest_mccv <- function(x, y, z, w, train, classify, train_size = 0.7, num_rep
 MSE_BIAS_MCCV_100 <- function(dataset, classe, train, classify, num_repeats = 100, seed = NULL, R = NULL , ...) {
   differenze_mccv_MSE <- numeric(0)
   differenze_mccv_BIAS <- numeric(0)
+  mccv_errs <- numeric(R)
+  true_errs <- numeric(R)
   # in caso R non venisse specificato
   if (is.null(R)) {R <- 50}
   # in caso il seed non venisse specificato
@@ -87,6 +89,8 @@ MSE_BIAS_MCCV_100 <- function(dataset, classe, train, classify, num_repeats = 10
     w <- tst[, classe]
     # errori MC-CV
     errori_mccv <- errorest_mccv(x, y, z, w, train, classify, train_size = 0.7, num_repeats = num_repeats, seed = seeds[r])
+    mccv_errs[r] <- errori_mccv[[1]]
+    true_errs[r] <- errori_mccv[[2]]
     # errore quadratico per la r-esima ripetizione
     differenza_mccv_cubo <- (errori_mccv[[1]]-errori_mccv[[2]])^2
     differenze_mccv_MSE <- c(differenze_mccv_MSE, differenza_mccv_cubo)
@@ -99,6 +103,6 @@ MSE_BIAS_MCCV_100 <- function(dataset, classe, train, classify, num_repeats = 10
   # BIAS
   BIAS_mccv <- sum(differenze_mccv_BIAS)/R
   # restituzione risultati
-  result_list <- list(MSE = MSE_mccv, Bias = BIAS_mccv)
+  result_list <- list(MSE = MSE_mccv, Bias = BIAS_mccv, errori = mccv_errs, true_errors = mean(true_errs))
   return(result_list)
 }

@@ -12,7 +12,7 @@ errorest_apparent <- function(x, y, train, classify, ...) {
 }
 
 #### CALCOLO ERRORE LOO BOOTSTRAP ####
-errorest_loo_boot <- function(x, y, train, classify, num_bootstraps = 50, ...) {
+errorest_loo_boot <- function(x, y, train, classify, num_bootstraps = 100000, ...) {
   # trasformazioni necessarie
   x <- as.matrix(x)
   y <- as.factor(y)
@@ -38,7 +38,7 @@ errorest_loo_boot <- function(x, y, train, classify, num_bootstraps = 50, ...) {
 }
 
 #### CALCOLO ERRORE BOOTSTRAP .632 ####
-errorest_632 <- function(x, y, z, w, train, classify, num_bootstraps = 50,
+errorest_632 <- function(x, y, z, w, train, classify, num_bootstraps = 100000,
                          seed = NULL , ...) {
   # trasformazioni necessarie
   x <- as.matrix(x)
@@ -69,10 +69,12 @@ errorest_632 <- function(x, y, z, w, train, classify, num_bootstraps = 50,
 }
 
 #### CALCOLO MSE E BIAS .632 ####
-MSE_BIAS_632 <- function(dataset, classe, train, classify, num_bootstraps = 50,
+MSE_BIAS_632 <- function(dataset, classe, train, classify, num_bootstraps = 100000,
                          seed = NULL , R = NULL , ...) {
   differenze_632_MSE <- numeric(0)
   differenze_632_BIAS <- numeric(0)
+  boot632_errs <- numeric(R)
+  true_errs <- numeric(R)
   # in caso R non venisse specificato
   if (is.null(R)) {R <- 50}
   # in caso il seed non venisse specificato
@@ -99,8 +101,10 @@ MSE_BIAS_632 <- function(dataset, classe, train, classify, num_bootstraps = 50,
     z <- data.matrix(tst[, -classe])
     w <- tst[, classe]
     # errori .632
-    errori_632 <- errorest_632(x, y, z, w, train, classify, num_bootstraps = 50,
+    errori_632 <- errorest_632(x, y, z, w, train, classify, num_bootstraps = num_bootstraps,
                                seed = seeds[r], ...)
+    boot632_errs[r] <- errori_632[[1]]
+    true_errs[r] <- errori_632[[2]]
     # errore quadratico per la r-esima ripetizione
     differenza_632_cubo <- (errori_632[[1]]-errori_632[[2]])^2
     differenze_632_MSE <- c(differenze_632_MSE, differenza_632_cubo)
@@ -113,6 +117,6 @@ MSE_BIAS_632 <- function(dataset, classe, train, classify, num_bootstraps = 50,
   # BIAS
   BIAS_632 <- sum(differenze_632_BIAS)/R
   # restituzione risultati
-  result_list <- list(MSE = MSE_632, Bias = BIAS_632)
+  result_list <- list(MSE = MSE_632, Bias = BIAS_632, errori = boot632_errs, true_errors = mean(true_errs))
   return(result_list)
 }
