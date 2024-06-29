@@ -1,6 +1,6 @@
 
 #### CALCOLO ERRORE BOOT ####
-errorest_boot <- function(x, y, z, w, train, classify, num_bootstraps = 50, seed = NULL, ...) {
+errorest_boot <- function(x, y, z, w, train, classify, num_bootstraps = 100, seed = NULL, ...) {
   # trasformazioni necessarie
   x <- as.matrix(x)
   y <- as.factor(y)
@@ -33,7 +33,7 @@ errorest_boot <- function(x, y, z, w, train, classify, num_bootstraps = 50, seed
 }
 
 #### CALCOLO MSE E BIAS BOOT ####
-MSE_BIAS_boot <- function(dataset, classe, train, classify, num_bootstraps = 50,
+MSE_BIAS_boot <- function(dataset, classe, train, classify, num_bootstraps = 100,
                           apparent = NULL, loo_boot = NULL, seed = NULL , R = NULL , ...) {
   differenze_boot_MSE <- numeric(0)
   differenze_boot_BIAS <- numeric(0)
@@ -65,7 +65,7 @@ MSE_BIAS_boot <- function(dataset, classe, train, classify, num_bootstraps = 50,
     z <- data.matrix(tst[, -classe])
     w <- tst[, classe]
     # errori boot
-    errori_boot <- errorest_boot(x, y, z, w, train, classify, num_bootstraps = 50, seed = seeds[r], ...)
+    errori_boot <- errorest_boot(x, y, z, w, train, classify, num_bootstraps = num_bootstraps, seed = seeds[r], ...)
     boot_errs[r] <- errori_boot[[1]]
     true_errs[r] <- errori_boot[[2]]
     # errore quadratico per la r-esima ripetizione

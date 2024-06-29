@@ -13,3 +13,12 @@ library(tree)
 library(MASS)
 library(kableExtra)
 library(tidyverse)
+library(heatmaply)
+library(naniar)
+library(visdat)
+library(UpSetR)
+library(skimr)
+
+
+
+

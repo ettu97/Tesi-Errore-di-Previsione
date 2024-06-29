@@ -48,7 +48,7 @@ errorest_cv_BCV <- function(x, y, train, classify, num_folds = 10, hold_out = NU
 }
 
 #### CALCOLO ERRORE BCV ####
-errorest_bcv <- function(x, y, z, w, train, classify, num_bootstraps = 10000,
+errorest_bcv <- function(x, y, z, w, train, classify, num_bootstraps = 100,
                          num_folds = 10, hold_out = NULL, seed=NULL, ...) {
   x <- as.matrix(x)
   y <- as.factor(y)
@@ -82,7 +82,7 @@ errorest_bcv <- function(x, y, z, w, train, classify, num_bootstraps = 10000,
 }
 
 #### CALCOLO MSE E BIAS BCV ####
-MSE_BIAS_BCV <- function(dataset, classe, train, classify, num_bootstraps = 10000,
+MSE_BIAS_BCV <- function(dataset, classe, train, classify, num_bootstraps = 100,
                          num_folds = 10, hold_out = NULL, seed=NULL, R = NULL , ...) {
   differenze_bcv_MSE <- numeric(0)
   differenze_bcv_BIAS <- numeric(0)

@@ -12,7 +12,7 @@ errorest_apparent <- function(x, y, train, classify, ...) {
 }
 
 #### CALCOLO ERRORE LOO BOOTSTRAP ####
-errorest_loo_boot <- function(x, y, train, classify, num_bootstraps = 100000, ...) {
+errorest_loo_boot <- function(x, y, train, classify, num_bootstraps = 100, ...) {
   # trasformazioni necessarie
   x <- as.matrix(x)
   y <- as.factor(y)
@@ -38,7 +38,7 @@ errorest_loo_boot <- function(x, y, train, classify, num_bootstraps = 100000, ..
 }
 
 #### CALCOLO ERRORE BOOTSTRAP .632 ####
-errorest_632 <- function(x, y, z, w, train, classify, num_bootstraps = 100000,
+errorest_632 <- function(x, y, z, w, train, classify, num_bootstraps = 100,
                          seed = NULL , ...) {
   # trasformazioni necessarie
   x <- as.matrix(x)
@@ -69,7 +69,7 @@ errorest_632 <- function(x, y, z, w, train, classify, num_bootstraps = 100000,
 }
 
 #### CALCOLO MSE E BIAS .632 ####
-MSE_BIAS_632 <- function(dataset, classe, train, classify, num_bootstraps = 100000,
+MSE_BIAS_632 <- function(dataset, classe, train, classify, num_bootstraps = 100,
                          seed = NULL , R = NULL , ...) {
   differenze_632_MSE <- numeric(0)
   differenze_632_BIAS <- numeric(0)

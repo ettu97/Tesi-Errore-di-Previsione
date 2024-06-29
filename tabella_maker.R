@@ -2,7 +2,7 @@
 #### TABELLA PER CONFRONTI ####
 
 tabella_confronti <- function(dataset, classe, R = NULL, seed = NULL,...) {
-  #### KNN K=3 ####
+  #### KNN K=5 ####
   boot_5nn <- MSE_BIAS_boot(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)
   b632_5nn <- MSE_BIAS_632(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)
   b632_plus_5nn <- MSE_BIAS_632_plus(dataset, classe = classe, R = R, train = train_5nn, classify = classify_knn, seed = seed)
