@@ -1,6 +1,3 @@
-
-
-
 table(data$class)
 
 skim(data)
@@ -9,14 +6,16 @@ str(data)
 
 
 
-MSE_BIAS_CV(data , classe=452, R=1, seed=123, train=train_7nn, classify=classify_knn)
+MSE_BIAS_BCV(data , classe=451, R=10, seed=123, train=train_7nn, classify=classify_knn)
 
 
-tabella_alz <- tabella_confronti(dataset = data, classe = 452, R = 1, seed = 123)
+tabella_alz <- tabella_confronti(dataset = data, classe = 451, R = 1, seed = 123)
 
-classe=452
+classe=451
 dataset <- data
+dataset <- dataset %>% select(-ID)
 
+str(dataset)
 
 data <- data.frame(
   MSE1_5nn = c(boot_5nn$MSE , b632_5nn$MSE, b632_plus_5nn$MSE, cv_5nn$MSE, loocv_5nn$MSE, bcv_5nn$MSE), 
@@ -41,7 +40,7 @@ kable(data, "html", row.names = FALSE) %>%
   add_header_above(c(" " = 1, "5-NN" = 2, "7-NN" = 2, "TREE" = 2))  %>%
   kable_styling(bootstrap_options = c("hover", "bordered", "striped", "responsive"))
 
-R=10
+R=50
 
 
 
@@ -50,12 +49,12 @@ R=10
 ################### BOXPLOTS #################
 
 errors_df <- data.frame(
-  boot_5nn,
-  b632_5nn, 
-  b632_plus_5nn,
-  cv_5nn,
-  loocv_5nn,
-  bcv_5nn
+  boot_7nn$errori,
+  b632_7nn$errori, 
+  b632_plus_7nn$errori,
+  cv_7nn$errori,
+  loocv_7nn$errori,
+  bcv_7nn$errori
 )
 
 # Transform data to long format
@@ -67,45 +66,35 @@ errors_long <- pivot_longer(errors_df,
 # Create a boxplot with ggplot2
 ggplot(errors_long, aes(x = Method, y = ErrorRate)) +
   geom_boxplot(fill = "lightblue") +
-  labs(title = "Boxplot of Different Error Estimations",
+  geom_hline(yintercept = boot_7nn$true_errors, color = "red", linetype = "dashed", size = 5) +
+  geom_hline(yintercept = b632_7nn$true_errors, color = "green", linetype = "dashed", size = 4) +
+  geom_hline(yintercept = b632_plus_7nn$true_errors, color = "purple", linetype = "dashed", size = 3) +
+  geom_hline(yintercept = cv_7nn$true_errors, color = "yellow", linetype = "dashed", size = 2) +
+  geom_hline(yintercept = loocv_7nn$true_errors, color = "cyan", linetype = "dashed", size = 1) +
+  geom_hline(yintercept = bcv_7nn$true_errors, color = "brown", linetype = "dashed", size = 0.5) +
+  labs(title = "Boxplot of Different Error Estimations for 7NN",
        y = "Error Rate",
        x = "Method") +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5)) # Center the plot title
-hist(dataset$air_time1)
+
+boot_5nn$true_errors
+ 
+
+
+dataset <- dataset %>% select(-ID)
 
 
 
+heatmaply_cor(cor, limits = c(-1, 1), colors = cool_warm)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+heatmaply_cor(
+  cor(dataset[,-451]),
+  xlab = "Features",
+  ylab = "Features",
+  k_col = 2,
+  k_row = 2
+)
 
 
 
