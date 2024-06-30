@@ -96,6 +96,6 @@ MSE_BIAS_LOOCV <- function(dataset, classe, train, classify, seed = NULL, R = NU
   # BIAS
   BIAS_loocv <- sum(differenze_loocv_BIAS)/R
   # restituzione risultati
-  result_list <- list(MSE = MSE_loocv, Bias = BIAS_loocv, errori = loocv_errs, true_errors = mean(true_errs))
+  result_list <- list(MSE = MSE_loocv, Bias = BIAS_loocv, errori = loocv_errs, true_errors = true_errs)
   return(result_list)
 }

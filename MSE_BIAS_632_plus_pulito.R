@@ -133,6 +133,6 @@ MSE_BIAS_632_plus <- function(dataset, classe, train, classify, num_bootstraps =
   # BIAS
   BIAS_632 <- sum(differenze_632_BIAS)/R
   # restituzione risultati
-  result_list <- list(MSE = MSE_632, Bias = BIAS_632, errori = boot632plus_errs, true_errors = mean(true_errs))
+  result_list <- list(MSE = MSE_632, Bias = BIAS_632, errori = boot632plus_errs, true_errors = true_errs)
   return(result_list)
 }

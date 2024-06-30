@@ -11,7 +11,7 @@ MSE_BIAS_BCV(data , classe=451, R=10, seed=123, train=train_7nn, classify=classi
 
 tabella_alz <- tabella_confronti(dataset = data, classe = 451, R = 1, seed = 123)
 
-classe=451
+classe=12
 dataset <- data
 dataset <- dataset %>% select(-ID)
 
@@ -46,7 +46,53 @@ R=50
 
 
 
-################### BOXPLOTS #################
+################### BOXPLOTS TREE #################
+
+errors_df <- data.frame(
+  boot_tree$errori,
+  b632_tree$errori, 
+  b632_plus_tree$errori,
+  cv_tree$errori,
+  loocv_tree$errori,
+  bcv_tree$errori
+)
+
+# 
+errors_long <- pivot_longer(errors_df, 
+                            cols = everything(), 
+                            names_to = "Method", 
+                            values_to = "ErrorRate")
+
+# 
+ggplot(errors_long, aes(x = Method, y = ErrorRate)) +
+  geom_boxplot(fill = "lightblue") +
+  geom_hline(yintercept = boot_tree$true_errors, color = "red", linetype = "dashed", size = 5) +
+  geom_hline(yintercept = b632_tree$true_errors, color = "green", linetype = "dashed", size = 4) +
+  geom_hline(yintercept = b632_plus_tree$true_errors, color = "purple", linetype = "dashed", size = 3) +
+  geom_hline(yintercept = cv_tree$true_errors, color = "yellow", linetype = "dashed", size = 2) +
+  geom_hline(yintercept = loocv_tree$true_errors, color = "cyan", linetype = "dashed", size = 1) +
+  geom_hline(yintercept = bcv_tree$true_errors, color = "brown", linetype = "dashed", size = 0.5) +
+  labs(title = "Boxplot of Different Error Estimations for TREE",
+       y = "Error Rate",
+       x = "Method") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5)) # Center the plot title
+
+
+
+
+dataset <- dataset %>% select(-ID)
+
+prova <- normalize(heart_statlog_cleveland_hungary_final) %>% mutate(target=as.factor(target))
+str(prova)
+
+
+
+
+
+table(prova$target)
+
+################### BOXPLOTS 7NN #################
 
 errors_df <- data.frame(
   boot_7nn$errori,
@@ -57,13 +103,13 @@ errors_df <- data.frame(
   bcv_7nn$errori
 )
 
-# Transform data to long format
+# 
 errors_long <- pivot_longer(errors_df, 
                             cols = everything(), 
                             names_to = "Method", 
                             values_to = "ErrorRate")
 
-# Create a boxplot with ggplot2
+# 
 ggplot(errors_long, aes(x = Method, y = ErrorRate)) +
   geom_boxplot(fill = "lightblue") +
   geom_hline(yintercept = boot_7nn$true_errors, color = "red", linetype = "dashed", size = 5) +
@@ -78,23 +124,12 @@ ggplot(errors_long, aes(x = Method, y = ErrorRate)) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5)) # Center the plot title
 
-boot_5nn$true_errors
- 
 
 
-dataset <- dataset %>% select(-ID)
 
 
 
-heatmaply_cor(cor, limits = c(-1, 1), colors = cool_warm)
 
-heatmaply_cor(
-  cor(dataset[,-451]),
-  xlab = "Features",
-  ylab = "Features",
-  k_col = 2,
-  k_row = 2
-)
 
 
 
@@ -106,58 +141,39 @@ heatmaply_cor(
 
 
 
+stimati <- as.data.frame(boot_7nn$errori)
+veri <- as.data.frame(boot_7nn$true_errors)
 
+stimati$Index <- rownames(stimati)  # Create an index column
+stimati$Index <- as.numeric(stimati$Index)  # Convert index to numeric if necessary
 
+#veri$Index <- rownames(veri)  # Create an index column
+#veri$Index <- as.numeric(veri$Index)  # Convert index to numeric if necessary
 
+veriVSstimati <- cbind(veri,stimati)
 
 
+# Crea il plot
+p <- ggplot() +
+  geom_line(data = veriVSstimati, aes(x = Index, y = boot_7nn$true_errors, color = "True Error")) +
+  #geom_point(data = veriVSstimati, aes(x = Index, y = boot_7nn$true_errors, color = "True Error")) +
+  geom_line(data = veriVSstimati, aes(x = Index, y = boot_7nn$errori, color = "Boot Estimate")) +
+  #geom_point(data = veriVSstimati, aes(x = Index, y = boot_7nn$errori, color = "Boot Estimate")) +
+  
+  geom_hline(aes(yintercept = mean(boot_7nn$true_errors), color = "Average True Error"), 
+             linetype = "dashed", size = 1, show.legend = TRUE) +
+  geom_hline(aes(yintercept = mean(boot_7nn$errori), color = "Average Boot Estimate"), 
+             linetype = "dashed", size = 1, show.legend = TRUE) +
+  
+  labs(title = "Plot di True Errors vs Boot Estimates con 7NN", x = "Iterazione", y = "Valore", color = "Legenda") +
+  
+  scale_color_manual(values = c("True Error" = "blue", "Boot Estimate" = "red",
+                                "Average True Error" = "blue4", "Average Boot Estimate" = "red4")) +
+  theme_minimal()
 
+# Stampa il plot
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ggplotly(p)
 
 
 

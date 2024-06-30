@@ -80,7 +80,7 @@ MSE_BIAS_boot <- function(dataset, classe, train, classify, num_bootstraps = 100
   # BIAS
   BIAS_boot <- sum(differenze_boot_BIAS)/R
   # restituzione risultati
-  result_list <- list(MSE = MSE_boot, Bias = BIAS_boot, errori=boot_errs, true_errors= mean(true_errs))
+  result_list <- list(MSE = MSE_boot, Bias = BIAS_boot, errori=boot_errs, true_errors= true_errs)
   return(result_list)
 }
 

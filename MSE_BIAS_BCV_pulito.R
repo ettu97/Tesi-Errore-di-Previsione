@@ -130,6 +130,6 @@ MSE_BIAS_BCV <- function(dataset, classe, train, classify, num_bootstraps = 100,
   # BIAS
   BIAS_bcv <- sum(differenze_bcv_BIAS)/R
   # restituzione risultati
-  result_list <- list(MSE = MSE_bcv, Bias = BIAS_bcv, errori = bcv_errs, true_errors = mean(true_errs))
+  result_list <- list(MSE = MSE_bcv, Bias = BIAS_bcv, errori = bcv_errs, true_errors = true_errs)
   return(result_list)
 }

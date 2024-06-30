@@ -111,6 +111,6 @@ MSE_BIAS_CV <- function(dataset, classe, train, classify, num_folds = 10,
   # BIAS
   BIAS_cv <- sum(differenze_cv_BIAS)/R
   # restituzione risultati
-  result_list <- list(MSE = MSE_cv, Bias = BIAS_cv, errori = cv_errs, true_errors = mean(true_errs))
+  result_list <- list(MSE = MSE_cv, Bias = BIAS_cv, errori = cv_errs, true_errors = true_errs)
   return(result_list)
 }

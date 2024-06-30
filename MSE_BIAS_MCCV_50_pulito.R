@@ -198,7 +198,7 @@ MSE_BIAS_MCCV_50_2 <- function(dataset, classe, train, classify, num_repeats = 5
   # BIAS
   BIAS_mccv <- sum(differenze_mccv_BIAS)/R
   # restituzione risultati
-  result_list <- list(MSE = MSE_mccv, Bias = BIAS_mccv, errori = mccv_errs, true_errors = mean(true_errs))
+  result_list <- list(MSE = MSE_mccv, Bias = BIAS_mccv, errori = mccv_errs, true_errors = true_errs)
   return(result_list)
 }
 
