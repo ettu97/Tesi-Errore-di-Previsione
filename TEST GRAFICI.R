@@ -127,18 +127,7 @@ ggplot(errors_long, aes(x = Method, y = ErrorRate)) +
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+################## PLOT BOOT ###########
 
 
 stimati <- as.data.frame(boot_7nn$errori)
@@ -156,9 +145,9 @@ veriVSstimati <- cbind(veri,stimati)
 # Crea il plot
 p <- ggplot() +
   geom_line(data = veriVSstimati, aes(x = Index, y = boot_7nn$true_errors, color = "True Error")) +
-  #geom_point(data = veriVSstimati, aes(x = Index, y = boot_7nn$true_errors, color = "True Error")) +
+  geom_point(data = veriVSstimati, aes(x = Index, y = boot_7nn$true_errors, color = "True Error")) +
   geom_line(data = veriVSstimati, aes(x = Index, y = boot_7nn$errori, color = "Boot Estimate")) +
-  #geom_point(data = veriVSstimati, aes(x = Index, y = boot_7nn$errori, color = "Boot Estimate")) +
+  geom_point(data = veriVSstimati, aes(x = Index, y = boot_7nn$errori, color = "Boot Estimate")) +
   
   geom_hline(aes(yintercept = mean(boot_7nn$true_errors), color = "Average True Error"), 
              linetype = "dashed", size = 1, show.legend = TRUE) +
@@ -176,16 +165,43 @@ p <- ggplot() +
 ggplotly(p)
 
 
+################## PLOT .632 ###########
+
+stimati <- as.data.frame(b632_7nn$errori)
+veri <- as.data.frame(b632_7nn$true_errors)
+
+stimati$Index <- rownames(stimati)  # Create an index column
+stimati$Index <- as.numeric(stimati$Index)  # Convert index to numeric if necessary
+
+#veri$Index <- rownames(veri)  # Create an index column
+#veri$Index <- as.numeric(veri$Index)  # Convert index to numeric if necessary
+
+veriVSstimati <- cbind(veri,stimati)
 
 
+# Crea il plot
+q <- ggplot() +
+  geom_line(data = veriVSstimati, aes(x = Index, y = b632_7nn$true_errors, color = "True Error")) +
+  geom_point(data = veriVSstimati, aes(x = Index, y = b632_7nn$true_errors, color = "True Error")) +
+  geom_line(data = veriVSstimati, aes(x = Index, y = b632_7nn$errori, color = ".632 Estimate")) +
+  geom_point(data = veriVSstimati, aes(x = Index, y = b632_7nn$errori, color = ".632 Estimate")) +
+  
+  geom_hline(aes(yintercept = mean(b632_7nn$true_errors), color = "Average True Error"), 
+             linetype = "dashed", size = 1, show.legend = TRUE) +
+  geom_hline(aes(yintercept = mean(b632_7nn$errori), color = "Average .632 Estimate"), 
+             linetype = "dashed", size = 1, show.legend = TRUE) +
+  
+  labs(title = "Plot di True Errors vs .632 Estimates con 7NN", x = "Iterazione", y = "Valore", color = "Legenda") +
+  
+  scale_color_manual(values = c("True Error" = "blue", ".632 Estimate" = "red",
+                                "Average True Error" = "blue4", "Average .632 Estimate" = "red4")) +
+  theme_minimal()
 
+# Stampa il plot
 
+ggplotly(q)
 
-
-
-
-
-
+ggsave("trueVSboot.pdf", plot = p, width = 8, height = 4)
 
 
 
