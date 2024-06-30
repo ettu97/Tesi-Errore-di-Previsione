@@ -2,8 +2,6 @@
 \label{ch:capitolo5}
 
 Inanzitutto occorre introdurre l'errore di previsione (true error) e l'errore apparente.
- 
-
 
 Si considerino i dati come $x_i =  (\underline{\beta_i},y_i)$ , $i = 1,2,...,n$ dove $x_i$ indica la $i$-esima osservazione presente all'interno del dataset, $\underline{\beta_i}$ è il vettore dei predittori mentre $y_i$ rappresenta la classe di appartenenza.
 Si supponga di ottenere una nuova osservazione, che verrà indicata con $x_0 =  (\underline{\beta_0},y_0)$
@@ -43,11 +41,10 @@ La leave-one-out cross-validation si può indicare come una versione della $k$-f
 
 A differenza della $k$-fold, dove il dataset viene diviso in $k$ parti ognuna contenente osservazioni uniche e non contenute all'interno delle altre $k-1$ parti, il metodo Monte Carlo consiste nell'estrarre $m = 1,2,...,M$ campioni di ampiezza prefissata senza reinserimento, andando così a creare un numero di training set e test set potenzialmente infinito, dato che le osservazioni all'interno dei vari split possono apparire più volte all'interno del test set. L'errore di previsione viene dunque stimato facendo la media tra gli errori ottenuti da ogni split.
 L'idea dietro l'utilizzo del metodo Monte Carlo è quello che utilizzando la k-fold, vengono analizzati solo alcuni dei possibili modi in cui il dataset poteva essere diviso, mentre con il Monte Carlo teoricamente si potrebbero analizzare tutte le possibili partizioni. Il metodo Monte Carlo dunque tende ad avere una minore variabilità rispetto alla k-fold (a patto che venga utilizzato un numero alto di split), ma a costo di un bias maggiore.
-Sia $\hat{y}^{m}$ la stima ottenuta testando il modello ottenuto dal $m$-esimo training set, lastima tramite MCCV sarà
+La stima tramite MCCV sarà
 
-% DA CORREGGERE!!!!!!!!!!
 \begin{equation}
-\widehat{\text{Err}}^{MCCV} = \frac{1}{m}\sum_{i=1}^{M}L(y_i, \hat{y_i}^{m}).
+\widehat{\text{Err}}^{MCCV} = \frac{1}{M} \sum_{i=1}^{M} \sum_{i=1}^{n}L(y_{i,m}, \hat{y}_{i,m})/n.
 \end{equation}
 
 
@@ -67,20 +64,16 @@ dove $\hat{y}^{*}_i$ indica la previsione ottenuta dal modello allenato sul camp
 Questa espressione però è ottenuta da un unico campione bootstrap, ed è dunque troppo variabile (\cite{efron1993}). Per ottenere una stimatore migliore occorre aumentare il numero di campioni bootstrap, così da poter calcolare l'errore medio per ogni campione, e infine fare una media delle stime ottenute da ogni campione boostrap, $b = 1,2,...,B$.
 La stima ottenuta tramite il bootstrap semplice è dunque
 \begin{equation}
-\widehat{\text{Err}}^{boot} = \frac{1}{B} \sum_{b=1}^{B} \sum_{i=1}^{n}L(y_i, \hat{y}^{*}_i)/n.
+\widehat{\text{Err}}^{boot} = \frac{1}{B} \sum_{b=1}^{B} \sum_{i=1}^{n}L(y_{i,b}, \hat{y}^{*}_{i,b})/n.
 \end{equation}
+
 
 
 \subsection{Leave-One-Out Bootstrap}
 \label{sec:sezione5.4.2}
 
-
-
 \subsection{Bootstrap .632}
 \label{sec:sezione5.4.3}
 
-
-
 \subsection{Bootstrap .632+}
 \label{sec:sezione5.4.4}
-
