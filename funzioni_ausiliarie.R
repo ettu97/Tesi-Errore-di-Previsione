@@ -70,7 +70,19 @@ classify_tree <- function(object, newdata) {
 
 #####################################
 
+train_tree2 <- function(x, y) {
+  data <- data.frame(x, y)
+  colnames(data)[ncol(data)] <- "y"
+  tree_model <- tree(y ~ ., data = data)  # Using tree instead of rpart
+  return(tree_model)
+}
 
+
+classify_tree2 <- function(object, newdata) {
+  newdata_df <- as.data.frame(newdata)
+  predictions <- predict(object, newdata_df, type = "class")  # Make sure the tree supports this type
+  return(predictions)
+}
 
 
 
