@@ -229,23 +229,23 @@ p
 
 ################## PLOT .632 ###########
 
-stimati <- as.data.frame(b632_7nn$errori)
-veri <- as.data.frame(b632_7nn$true_errors)
+stimati632 <- as.data.frame(b632_7nn$errori)
+veri632 <- as.data.frame(b632_7nn$true_errors)
 
-stimati$Index <- rownames(stimati)  # Create an index column
-stimati$Index <- as.numeric(stimati$Index)  # Convert index to numeric if necessary
+stimati632$Index <- rownames(stimati632)  # Create an index column
+stimati632$Index <- as.numeric(stimati632$Index)  # Convert index to numeric if necessary
 
 #veri$Index <- rownames(veri)  # Create an index column
 #veri$Index <- as.numeric(veri$Index)  # Convert index to numeric if necessary
 
-veriVSstimati <- cbind(veri,stimati)
+veriVSstimati632 <- cbind(veri632,stimati632)
 
 
 # Crea il plot
 q <- ggplot() +
-  geom_line(data = veriVSstimati, aes(x = Index, y = b632_7nn$true_errors, color = "True Errors")) +
+  geom_line(data = veriVSstimati632, aes(x = Index, y = b632_7nn$true_errors, color = "True Errors")) +
   #geom_point(data = veriVSstimati, aes(x = Index, y = b632_7nn$true_errors, color = "True Errors")) +
-  geom_line(data = veriVSstimati, aes(x = Index, y = b632_7nn$errori, color = ".632 Estimates")) +
+  geom_line(data = veriVSstimati632, aes(x = Index, y = b632_7nn$errori, color = ".632 Estimates")) +
   #geom_point(data = veriVSstimati, aes(x = Index, y = b632_7nn$errori, color = ".632 Estimates")) +
   
   geom_hline(aes(yintercept = mean(b632_7nn$true_errors), color = "Average True Error"), 
@@ -339,23 +339,23 @@ s
 
 ################## PLOT LOOCV ###########
 
-stimati <- as.data.frame(loocv_7nn$errori)
-veri <- as.data.frame(loocv_7nn$true_errors)
+stimatiloocv <- as.data.frame(loocv_7nn$errori)
+veriloocv <- as.data.frame(loocv_7nn$true_errors)
 
-stimati$Index <- rownames(stimati)  # Create an index column
-stimati$Index <- as.numeric(stimati$Index)  # Convert index to numeric if necessary
+stimatiloocv$Index <- rownames(stimatiloocv)  # Create an index column
+stimatiloocv$Index <- as.numeric(stimatiloocv$Index)  # Convert index to numeric if necessary
 
 #veri$Index <- rownames(veri)  # Create an index column
 #veri$Index <- as.numeric(veri$Index)  # Convert index to numeric if necessary
 
-veriVSstimati <- cbind(veri,stimati)
+veriVSstimatiloocv <- cbind(veriloocv,stimatiloocv)
 
 
 # Crea il plot
 t <- ggplot() +
-  geom_line(data = veriVSstimati, aes(x = Index, y = loocv_7nn$true_errors, color = "True Errors")) +
+  geom_line(data = veriVSstimatiloocv, aes(x = Index, y = loocv_7nn$true_errors, color = "True Errors")) +
   #geom_point(data = veriVSstimati, aes(x = Index, y = loocv_7nn$true_errors, color = "True Errors")) +
-  geom_line(data = veriVSstimati, aes(x = Index, y = loocv_7nn$errori, color = "LOOCV Estimates")) +
+  geom_line(data = veriVSstimatiloocv, aes(x = Index, y = loocv_7nn$errori, color = "LOOCV Estimates")) +
   #geom_point(data = veriVSstimati, aes(x = Index, y = loocv_7nn$errori, color = "LOOCV Estimates")) +
   
   geom_hline(aes(yintercept = mean(loocv_7nn$true_errors), color = "Average True Error"), 
@@ -410,11 +410,31 @@ u
 #ggplotly(q)
 
 
+##############  .632 vs loocv #########
+
+veriVSstimati <- cbind(stimati632[,c(1)],stimatiloocv)
+colnames(veriVSstimati) <- c("boot632", "loocv","Index")
 
 
+# Crea il plot
+loocvVS.632 <- ggplot() +
+  geom_line(data = veriVSstimati, aes(x = Index, y = loocv, color = "LOOCV Estimates")) +
 
+  geom_line(data = veriVSstimati, aes(x = Index, y = boot632, color = "Boot .632 Estimates")) +
+  
+  #geom_hline(aes(yintercept = mean(loocv_7nn$true_errors), color = "Average True Error"), 
+  #           linetype = "dashed", size = 1, show.legend = TRUE) +
+  #geom_hline(aes(yintercept = mean(loocv_7nn$errori), color = "Average LOOCV Estimate"), 
+  #           linetype = "dashed", size = 1, show.legend = TRUE) +
+  
+  labs(title = "Plot di .632 Estimates vs LOOCV Estimates con 7NN", x = "Iterazione", y = "Valore", color = "Legenda") +
+  
+  scale_color_manual(values = c("LOOCV Estimates" = "blue", "Boot .632 Estimates" = "red")) +
+  theme_minimal()
 
+loocvVS.632
 
+#########################
 
 
 
