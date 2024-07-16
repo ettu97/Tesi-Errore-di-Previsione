@@ -3,8 +3,8 @@
 
 Inanzitutto occorre introdurre l'errore di previsione (true error) e l'errore apparente.
 
-Si considerino i dati come $x_i =  (\underline{\beta_i},y_i)$ , $i = 1,2,...,n$ dove $x_i$ indica la $i$-esima osservazione presente all'interno del dataset, $\underline{\beta_i}$ è il vettore dei predittori mentre $y_i$ rappresenta la classe di appartenenza.
-Si supponga di ottenere una nuova osservazione, che verrà indicata con $x_0 =  (\underline{\beta_0},y_0)$
+Si considerino i dati come $x_i =  (\underline{\beta_i},y_i)$ , $i = 1,2,...,n$, dove $x_i$ indica la $i$-esima osservazione presente all'interno del dataset, $\underline{\beta_i}$ è il vettore dei predittori, mentre $y_i$ rappresenta la classe di appartenenza.
+Si supponga di ottenere una nuova osservazione, che verrà indicata con $x_0 =  (\underline{\beta_0},y_0)$.
 Si consideri ${L(y,\hat{y})}=I[\hat{y} \neq y]$ come una misura dell'errore tra la risposta $y$ e la previsione $\hat{y}$. Nei casi presentati il riferimento sarà ${L(y,\hat{y})}=I[\hat{y} \neq y]$. \\
 L'errore di previsione (reale) è dunque così definito
 \begin{equation}
@@ -30,7 +30,7 @@ Indicando con $\hat{y}^{-i}$ la stima ottenuta rimuovendo la $i$-esima osservazi
 \subsection{k-fold Cross-Validation}
 \label{sec:sezione5.1.2}
 
-Per ottenere la stima tramite $k$-fold cross-validation, anzichè escludere la i-esima osservazione, si procede escludendo una parte di osservazioni indicata con $k(i)$. Indicando con $k(i)$ la parte contenente l'osservazione $i$-esima e con $\hat{y}^{-k(i)}$ la stima ottenuta rimuovendo la $k(i)$-esima parte dal training set, la stima tramite $k$-fold cross-validation è
+Per ottenere la stima tramite $k$-fold cross-validation, anzichè escludere la $i$-esima osservazione, si procede escludendo una parte di osservazioni indicata con $k(i)$. Indicando con $k(i)$ la parte contenente l'osservazione $i$-esima e con $\hat{y}^{-k(i)}$ la stima ottenuta rimuovendo la $k(i)$-esima parte dal training set, la stima tramite $k$-fold cross-validation è
 \begin{equation}
 \widehat{\text{Err}}^{kCV} = \mathbb{E}[L(y_i, \hat{y_i}^{-k(i)})] = \frac{1}{n} \sum_{i=1}^{n} L(y_i, \hat{y_i}^{-k(i)}).
 \end{equation}
@@ -40,7 +40,7 @@ La leave-one-out cross-validation si può indicare come una versione della $k$-f
 \label{sec:sezione5.1.3}
 
 A differenza della $k$-fold, dove il dataset viene diviso in $k$ parti ognuna contenente osservazioni uniche e non contenute all'interno delle altre $k-1$ parti, il metodo Monte Carlo consiste nell'estrarre $m = 1,2,...,M$ campioni di ampiezza prefissata senza reinserimento, andando così a creare un numero di training set e test set potenzialmente infinito, dato che le osservazioni all'interno dei vari split possono apparire più volte all'interno del test set. L'errore di previsione viene dunque stimato facendo la media tra gli errori ottenuti da ogni split.
-L'idea dietro l'utilizzo del metodo Monte Carlo è quello che utilizzando la k-fold, vengono analizzati solo alcuni dei possibili modi in cui il dataset poteva essere diviso, mentre con il Monte Carlo teoricamente si potrebbero analizzare tutte le possibili partizioni. Il metodo Monte Carlo dunque tende ad avere una minore variabilità rispetto alla k-fold (a patto che venga utilizzato un numero alto di split), ma a costo di un bias maggiore.
+L'idea dietro l'utilizzo del metodo Monte Carlo è quello che utilizzando la $k$-fold, vengono analizzati solo alcuni dei possibili modi in cui il dataset poteva essere diviso, mentre con il Monte Carlo teoricamente si potrebbero analizzare tutte le possibili partizioni. Il metodo Monte Carlo dunque tende ad avere una minore variabilità rispetto alla $k$-fold (a patto che venga utilizzato un numero alto di split), ma a costo di un bias maggiore.
 La stima tramite MCCV sarà
 
 \begin{equation}
@@ -55,7 +55,7 @@ La stima tramite MCCV sarà
 \subsection{Boostrap Semplice}
 \label{sec:sezione5.4.1}
 
-Il bootstrap semplice consiste nell'estrarre con reinserimento dal dataset un numero B di campioni con dimensioni pari al dataset originale. Il modello viene poi allenato su tutti i campioni bootstrap e testato sul dataset di partenza. Una volta ottenuti quindi B errori di previsione, ne viene fatta la media, ottenendo cosi la stima stramite Bootstrap semplice dell'errore di previsione. 
+Il bootstrap semplice consiste nell'estrarre con reinserimento dal dataset un numero $B$ di campioni con dimensioni pari al dataset originale. Il modello viene poi allenato su tutti i campioni bootstrap e testato sul dataset di partenza. Una volta ottenuti quindi $B$ errori di previsione, ne viene fatta la media, ottenendo cosi la stima stramite Bootstrap semplice dell'errore di previsione. 
 Sia $x^{*}_i =  (\underline{\beta_i}^{*},y^{*}_i)$, $i = 1,2,...,n$ un campione bootstrap, la stima plug-in dell'errore di previsione è
 \begin{equation}
 \frac{1}{n} \sum_{i=1}^{n} L(y_i, \hat{y}^{*}_i),
@@ -64,19 +64,43 @@ dove $\hat{y}^{*}_i$ indica la previsione ottenuta dal modello allenato sul camp
 Questa espressione però è ottenuta da un unico campione bootstrap, ed è dunque troppo variabile (\cite{efron1993}). Per ottenere una stimatore migliore occorre aumentare il numero di campioni bootstrap, così da poter calcolare l'errore medio per ogni campione, e infine fare una media delle stime ottenute da ogni campione boostrap, $b = 1,2,...,B$.
 La stima ottenuta tramite il bootstrap semplice è dunque
 \begin{equation}
-\widehat{\text{Err}}^{boot} = \frac{1}{B} \sum_{b=1}^{B} \sum_{i=1}^{n}L(y_{i,b}, \hat{y}^{*}_{i,b})/n.
+\widehat{\text{Err}}^{BOOT} = \frac{1}{B} \sum_{b=1}^{B} \sum_{i=1}^{n}L(y_{i,b}, \hat{y}^{*}_{i,b})/n.
+\end{equation}
+
+
+
+\subsection{Leave-One-Out Bootstrap}
+\label{sec:sezione5.4.2}
+
+Il leave-one-out bootstrap viene proposto da \textcite{efron1983} come una versione smoothed della LOOCV. Consiste nel prevedere l'errore di una $i$-esima osservazione solo tramite campioni bootstrap che non la contengono.
+Sia $C(i)$ un set di indici dei campioni bootstrap che non contengono l'$i$-esima osservazione e $B(i)$ il numero di tali campioni bootstrap.
+La stima tramite LOOB sarà
+\begin{equation}
+\widehat{\text{Err}}^{LOOB} = \frac{1}{n} \sum_{i=1}^{n} \sum\limits_{b \in {C(i)}}L(y_{i,b}, \hat{y}^{*}_{i,b})/B(i).
 \end{equation}
 
 
 \subsection{Bootstrap .632}
 \label{sec:sezione5.4.3}
 
+
+Con l'obiettivo di correggere gli aspetti negativi del bootstrap semplice e del leave-on-out bootstrap, \textcite{efron1983} propone un terzo stimatore basato sul Bootstrap, che chiama lo stimatore .632. L'idea dietro al bootstrap .632 è quella di contrastare il bias ottimista relativo all'errore apparente con il bias negativo ottenuto dal LOOB unendo le due stime dando un peso di $0.368$ al primo errore e $0.632$ al secondo. Il fattore .632 riflette la proporzione attesa di osservazioni che non si ripetono all'interno del campione bootstrap. Per arrivare a questo numero, che rappresenta la probabilità che una osservazione venga selezionata, occorre partire dalla probabilità che non venga selezionata. Durante la prima estrazione, se la probabilità di estrarre un'osservazione è $1/n$, la probabilità di non estrarla sarà $1-1/n$. Se in totale ci sono $n$ estrazioni, tutte indipendenti tra loro e con reinserimento, la probabilità di non selezionare mai l'osservazione diventerà $(1-1/n)^n$. Il problema diventa quindi quello di calcolare il limite
+\begin{equation}
+\lim_{n \to \infty} \left(1 - \frac{1}{n}\right)^n.
+\end{equation}
+Tale limite risulta essere uguale a $\frac{1}{e} \approx 0.368$. Essendo questa la probabilità che una osservazione non venga estratta, la probabilità che venga estratta sarà $1-0.368=0.632$
+La stima tramite bootstrap .632 sarà
+\begin{equation}
+\widehat{\text{Err}}^{.632} = 0.368 \cdot \overline{\text{err}} + 0.632 \cdot \widehat{\text{Err}}^{LOOB}.
+\end{equation}
+
+
 \subsection{Bootstrap .632+}
 \label{sec:sezione5.4.4}
 
+
 \section{Bootstrap-Cross-Validation}
 \label{sec:sezione5.5}
-
 
 
 
