@@ -44,10 +44,15 @@ train_7nn <- function(x, y, k = 7) {
   list(train_data = x, train_labels = y, k = k)
 }
 
+train_9nn <- function(x, y, k = 9) {
+  list(train_data = x, train_labels = y, k = k)
+}
+
 # FUNZIONE CLASSIFY
 classify_knn <- function(object, newdata) {
   knn(train = object$train_data, test = newdata, cl = object$train_labels, k = object$k)
 }
+
 
 #### ALBERI DECISIONALI ####
 
