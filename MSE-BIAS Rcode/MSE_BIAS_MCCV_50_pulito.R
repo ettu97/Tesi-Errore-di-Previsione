@@ -202,3 +202,64 @@ MSE_BIAS_MCCV_50_2 <- function(dataset, classe, train, classify, num_repeats = 5
   return(result_list)
 }
 
+
+MSE_BIAS_MCCV_50_2(df_norm, classe=17, R=5, train=train_9nn, classify=classify_knn, seed=123)
+MSE_BIAS_MCCV_50(df_norm, classe=17, R=5, train=train_9nn, classify=classify_knn, seed=123)
+
+
+
+errorest_mccv <- function(x, y, z, w, train, classify, num_splits = 100, train_size = 0.7, seed = NULL, ...) {
+  # Transformations
+  x <- as.matrix(x)
+  y <- as.factor(y)
+  z <- as.matrix(z)
+  w <- as.factor(w)
+  
+  # Set seed for reproducibility
+  if (!is.null(seed)) {
+    set.seed(seed)
+  }
+  
+  # Number of observations
+  n <- length(y)
+  
+  # Number of training samples
+  n_train <- floor(train_size * n)
+  
+  # Initialize errors vector
+  errors <- numeric(num_splits)
+  
+  # Perform Monte Carlo Cross-Validation
+  for (i in 1:num_splits) {
+    # Randomly split the data into training and test sets
+    train_indices <- sample(seq_len(n), n_train)
+    test_indices <- setdiff(seq_len(n), train_indices)
+    
+    # Train the model
+    train_out <- train(x[train_indices, ], y[train_indices], ...)
+    
+    # Classify the test set
+    classifications <- classify(object = train_out, newdata = x[test_indices, ])
+    
+    # Calculate error for this split
+    errors[i] <- mean(classifications != y[test_indices])
+  }
+  
+  # MCCV error (average over all splits)
+  err_mccv <- mean(errors)
+  
+  # Calculate true error on Test (w+z)
+  train_test <- train(x, y, ...)
+  classifications_test <- classify(object = train_test, newdata = z)
+  true_err <- mean(w != classifications_test)
+  
+  # Return results
+  result_list <- list(err_mccv, true_err)
+  return(result_list)
+}
+
+
+
+
+
+
